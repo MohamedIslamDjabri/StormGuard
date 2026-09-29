@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #111418;
+  --color-surface-dim: #111418;
+  --color-surface-bright: #36393e;
+  --color-surface-variant: #323539;
+  --color-surface-container-lowest: #0b0e12;
+  --color-surface-container-low: #191c20;
+  --color-surface-container: #1d2024;
+  --color-surface-container-high: #272a2e;
+  --color-surface-container-highest: #323539;
+  --color-on-surface: #e1e2e8;
+  --color-on-surface-variant: #d3c5ac;
+  --color-outline: #9c8f79;
+  --color-outline-variant: #4f4633;
+  --color-primary: #ffe1a7;
+  --color-on-primary: #402d00;
+  --color-primary-container: #fbbf24;
+  --color-on-primary-container: #6c4f00;
+  --color-primary-fixed: #ffdf9f;
+  --color-primary-fixed-dim: #f9bd22;
+  --color-secondary: #c2c7cf;
+  --color-secondary-container: #42474e;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+  --color-tertiary: #ffdcd9;
+  --color-background: #111418;
+  --color-on-background: #e1e2e8;
+
+  --spacing-margin-desktop: 4rem;
+  --spacing-margin-tablet: 2rem;
+  --spacing-margin: 1rem;
+  --spacing-gutter: 1.25rem;
+  --spacing-gutter-desktop: 2rem;
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+
+  --font-display-hero: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-headline-lg: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-headline-md: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-headline-sm: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-label-lg: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-label-md: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-label-sm: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-code-telemetry: var(--font-space-grotesk), "Space Grotesk", monospace;
+  --font-body-lg: var(--font-inter), "Inter", sans-serif;
+  --font-body-md: var(--font-inter), "Inter", sans-serif;
+  --font-body-sm: var(--font-inter), "Inter", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--color-surface, #111418);
+    color: var(--color-on-surface, #e1e2e8);
+    font-family: var(--font-inter), "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Custom utilities matching Stitch design tokens */
+.font-display-hero {
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  letter-spacing: -0.03em;
+}
+.font-code-telemetry {
+  font-family: var(--font-space-grotesk), "Space Grotesk", monospace;
+  letter-spacing: 0.04em;
+}
+.font-headline-lg {
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  letter-spacing: -0.02em;
+}
+.font-headline-sm {
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+}
+.font-label-lg {
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  letter-spacing: 0.02em;
+}
+.font-label-md {
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  letter-spacing: 0.05em;
+}
+.font-label-sm {
+  font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  letter-spacing: 0.08em;
+}
+
+/* Audio waveform animation */
+@keyframes pulseWave {
+  0%, 100% { height: 12px; }
+  50% { height: 48px; }
+}
+
+.animate-wave-1 { animation: pulseWave 1.2s ease-in-out infinite 0.1s; }
+.animate-wave-2 { animation: pulseWave 1.2s ease-in-out infinite 0.25s; }
+.animate-wave-3 { animation: pulseWave 1.2s ease-in-out infinite 0.4s; }
+.animate-wave-4 { animation: pulseWave 1.2s ease-in-out infinite 0.15s; }
+.animate-wave-5 { animation: pulseWave 1.2s ease-in-out infinite 0.3s; }
+

@@ -1,0 +1,6 @@
+{
+  "name": "StormGuard Roofing",
+  "description": "Tactical storm damage restoration, 24/7 emergency roof repair, rapid tarping, precision drone inspections, and insurance claims navigation across Central Texas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
