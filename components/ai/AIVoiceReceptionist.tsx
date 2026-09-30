@@ -66,6 +66,14 @@ export default function AIVoiceReceptionist() {
   };
 
   const handleOpenCallModal = (mode: 'call' | 'schedule') => {
+    if (typeof window !== 'undefined' && (window as any).openStormGuardVoiceCall) {
+      if (mode === 'schedule' && (window as any).openStormGuardVoiceSchedule) {
+        (window as any).openStormGuardVoiceSchedule();
+      } else {
+        (window as any).openStormGuardVoiceCall();
+      }
+      return;
+    }
     setModalMode(mode);
     setModalOpen(true);
   };

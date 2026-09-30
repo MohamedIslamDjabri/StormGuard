@@ -10,7 +10,7 @@ import {
   Volume2,
   VolumeX,
   Clock,
-  CheckCircle,
+  CheckCircle2,
   Calendar,
   ShieldAlert,
   X,
@@ -18,6 +18,8 @@ import {
   Send,
   Sparkles,
   MapPin,
+  FileCheck,
+  Zap,
 } from 'lucide-react';
 import { SITE_CONFIG } from '@/constants/data';
 
@@ -25,6 +27,15 @@ interface VoiceMessage {
   speaker: 'ai' | 'user';
   text: string;
   time: string;
+}
+
+interface BookingVoucher {
+  token: string;
+  eta: string;
+  crew: string;
+  address?: string;
+  damageType?: string;
+  status: string;
 }
 
 interface AIVoiceCallModalProps {
@@ -40,15 +51,16 @@ export default function AIVoiceCallModal({
 }: AIVoiceCallModalProps) {
   const [activeTab, setActiveTab] = useState<'call' | 'schedule'>(defaultMode);
 
-  // Live Call States: 'idle' | 'dialing' | 'connected' | 'ended' | 'confirmed'
-  const [callStatus, setCallStatus] = useState<'idle' | 'dialing' | 'connected' | 'ended' | 'confirmed'>('idle');
+  // Live Call States: 'idle' | 'dialing' | 'connected' | 'ended'
+  const [callStatus, setCallStatus] = useState<'idle' | 'dialing' | 'connected' | 'ended'>('idle');
   const [callDuration, setCallDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [conversation, setConversation] = useState<VoiceMessage[]>([]);
   const [userInput, setUserInput] = useState('');
   const [isAiSpeaking, setIsAiSpeaking] = useState(false);
-  const [bookingConfirmed, setBookingConfirmed] = useState<any>(null);
+  const [isListeningMic, setIsListeningMic] = useState(false);
+  const [bookingConfirmed, setBookingConfirmed] = useState<BookingVoucher | null>(null);
 
   // Schedule Callback Form States
   const [schedName, setSchedName] = useState('');
@@ -61,8 +73,9 @@ export default function AIVoiceCallModal({
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
 
-  // Auto scroll chat
+  // Auto scroll transcript
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversation]);
@@ -107,7 +120,7 @@ export default function AIVoiceCallModal({
 
     setTimeout(() => {
       setCallStatus('connected');
-      const greeting = "StormGuard Emergency Dispatch. I see you're calling regarding Central Texas weather damage. Are you experiencing active interior leaks, or did hail or wind impact your roof?";
+      const greeting = "StormGuard Emergency Dispatch online. I see you're calling from Central Texas regarding roof storm damage. Are you experiencing active interior leaks, or did hail impact your shingles?";
       setConversation([
         {
           speaker: 'ai',
@@ -116,7 +129,7 @@ export default function AIVoiceCallModal({
         },
       ]);
       speakText(greeting);
-    }, 1800);
+    }, 1600);
   };
 
   // End Call
@@ -124,11 +137,17 @@ export default function AIVoiceCallModal({
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch {}
+    }
     setCallStatus('ended');
     setIsAiSpeaking(false);
+    setIsListeningMic(false);
   };
 
-  // Handle User Voice / Response Submission
+  // Handle User Voice / Message Input
   const handleUserMessage = async (text: string) => {
     if (!text.trim() || callStatus !== 'connected') return;
 
@@ -141,20 +160,38 @@ export default function AIVoiceCallModal({
     setConversation((prev) => [...prev, userMsg]);
     setUserInput('');
 
-    // AI logic response
+    // Dynamic AI logic & Booking Qualification
     const lower = text.toLowerCase();
     let aiResponse = "";
     let shouldConfirmBooking = false;
+    let eta = "38 Minutes";
+    let crew = "Mobile Tarp Van #3 (Austin Metro Core)";
 
     if (lower.includes('leak') || lower.includes('water') || lower.includes('drip') || lower.includes('ceiling')) {
-      aiResponse = "I've flagged this as a Priority 1 active water breach. Our mobile tarping crew can be on site in 35-45 minutes. May I confirm your street address or ZIP code to lock in the crew?";
+      aiResponse = "I've flagged active water breach as Priority 1 Critical. Our mobile tarping crew can be on site in 35-45 minutes. May I confirm your street address or ZIP code to lock in the crew?";
     } else if (lower.includes('hail') || lower.includes('dent') || lower.includes('shingle')) {
-      aiResponse = "Understood. Hail micro-fractures compromise the waterproofing layer. I am reserving an autonomous 4K drone forensic scan for your address today. What is your best contact phone number?";
-    } else if (lower.includes('787') || lower.includes('786') || lower.includes('street') || lower.includes('rd') || lower.includes('ave') || lower.includes('austin')) {
-      aiResponse = "Perfect. I have dispatched Mobile Unit #3 to your location and confirmed your emergency inspection token. Would you like an instant SMS confirmation sent to your phone?";
+      aiResponse = "Understood. Hail impacts create micro-fractures in fiberglass shingle mats. I can book an autonomous 4K drone forensic scan for your property today. What is your street address?";
+    } else if (
+      lower.includes('787') ||
+      lower.includes('786') ||
+      lower.includes('austin') ||
+      lower.includes('round rock') ||
+      lower.includes('street') ||
+      lower.includes('rd') ||
+      lower.includes('ave') ||
+      lower.includes('drive') ||
+      lower.includes('lane') ||
+      lower.includes('way')
+    ) {
+      aiResponse = "Perfect. Address verified. I have reserved Mobile Dispatch Unit #3 and confirmed your emergency inspection booking voucher. A field supervisor is assigned and your ticket is locked.";
       shouldConfirmBooking = true;
+    } else if (lower.includes('book') || lower.includes('schedule') || lower.includes('confirm') || lower.includes('yes') || lower.includes('tomorrow')) {
+      aiResponse = "Inspection appointment confirmed. I have reserved tomorrow's priority 4K drone photogrammetry slot for you. Our crew will notify you 30 minutes before arrival.";
+      shouldConfirmBooking = true;
+      eta = "Scheduled Tomorrow 10:00 AM";
+      crew = "Drone Forensic Unit #1 (Central Texas)";
     } else {
-      aiResponse = "Got it. I've recorded those damage details into your dispatch dossier. An emergency field technician is standing by to confirm your inspection time.";
+      aiResponse = "Received. I have entered those property notes into your dispatch dossier. To dispatch an emergency tarp crew or drone scan immediately, please provide your address or ZIP code.";
     }
 
     setTimeout(() => {
@@ -169,13 +206,62 @@ export default function AIVoiceCallModal({
       speakText(aiResponse);
 
       if (shouldConfirmBooking) {
-        setBookingConfirmed({
-          token: `TX-VOICE-${Math.floor(1000 + Math.random() * 9000)}`,
-          eta: '38 Minutes',
-          crew: 'Mobile Response Van #3 (Austin Core)',
-        });
+        const randomId = Math.floor(1000 + Math.random() * 9000);
+        const voucher: BookingVoucher = {
+          token: `TX-VOICE-${randomId}`,
+          eta,
+          crew,
+          address: text,
+          status: 'DISPATCH ASSIGNED',
+        };
+        setBookingConfirmed(voucher);
       }
-    }, 900);
+    }, 850);
+  };
+
+  // Toggle Live Microphone Listening (Web Speech Recognition)
+  const toggleMicListening = () => {
+    if (typeof window === 'undefined') return;
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported in this browser. Please use the one-tap voice chips or type below.");
+      return;
+    }
+
+    if (isListeningMic) {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch {}
+      }
+      setIsListeningMic(false);
+    } else {
+      try {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = () => setIsListeningMic(true);
+        recognition.onend = () => setIsListeningMic(false);
+        recognition.onerror = () => setIsListeningMic(false);
+
+        recognition.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript;
+          if (transcript) {
+            handleUserMessage(transcript);
+          }
+        };
+
+        recognitionRef.current = recognition;
+        recognition.start();
+      } catch (err) {
+        console.warn("Microphone start error:", err);
+        setIsListeningMic(false);
+      }
+    }
   };
 
   // Handle Schedule Callback Submission
@@ -201,10 +287,10 @@ export default function AIVoiceCallModal({
       setSchedSuccess(data);
     } catch {
       setSchedSuccess({
-        token: 'TX-VOICE-8924',
+        token: `TX-VOICE-${Math.floor(1000 + Math.random() * 9000)}`,
         etaMinutes: 35,
-        assignedCrew: 'Central Texas Rapid Response Unit #2',
-        confirmationMessage: 'Your AI emergency voice callback has been prioritized. Expect a call within the requested window.',
+        assignedCrew: 'Central Texas Rapid Response Fleet Unit #2',
+        confirmationMessage: 'Your AI emergency voice callback has been prioritized. Expect an automated dispatch call within your requested window.',
       });
     } finally {
       setSchedLoading(false);
@@ -220,23 +306,23 @@ export default function AIVoiceCallModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-[#111418] border border-[#fbbf24]/50 rounded-2xl max-w-xl w-full max-h-[92vh] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.9)] relative overflow-hidden">
-        {/* Header Bar */}
-        <div className="p-4 sm:p-5 border-b border-[#323539] bg-[#1d2024] flex items-center justify-between">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="bg-[#111418] border-2 border-[#fbbf24]/50 rounded-2xl max-w-xl w-full max-h-[92vh] flex flex-col shadow-[0_0_60px_rgba(0,0,0,0.95)] relative overflow-hidden">
+        {/* Modal Top Header */}
+        <div className="p-3.5 sm:p-4 border-b border-[#323539] bg-[#1d2024] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#fbbf24]/20 border border-[#fbbf24]/40 flex items-center justify-center text-[#ffe1a7]">
+            <div className="w-9 h-9 rounded-full bg-[#fbbf24]/20 border border-[#fbbf24]/50 flex items-center justify-center text-[#ffe1a7]">
               <Radio className="w-5 h-5 animate-pulse text-[#fbbf24]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-headline-sm text-base text-[#e1e2e8] font-bold">
+                <span className="font-headline-sm text-sm sm:text-base text-[#e1e2e8] font-bold">
                   AI Voice Emergency Receptionist
                 </span>
                 <span className="h-2 w-2 rounded-full bg-[#fbbf24] animate-ping"></span>
               </div>
-              <p className="font-code-telemetry text-xs text-[#d3c5ac]">
-                Central Texas 24/7 Voice Dispatch Link
+              <p className="font-code-telemetry text-[11px] text-[#d3c5ac]">
+                Real-Time Voice Booking &amp; Dispatch Line
               </p>
             </div>
           </div>
@@ -254,28 +340,28 @@ export default function AIVoiceCallModal({
         </div>
 
         {/* Mode Selector Tabs */}
-        <div className="grid grid-cols-2 p-1.5 bg-[#191c20] border-b border-[#323539] text-xs font-label-md">
+        <div className="grid grid-cols-2 p-1 bg-[#191c20] border-b border-[#323539] text-xs font-label-md">
           <button
             type="button"
             onClick={() => setActiveTab('call')}
-            className={`py-2 text-center rounded-md font-bold transition-all cursor-pointer ${
+            className={`py-2 text-center rounded font-bold transition-all cursor-pointer ${
               activeTab === 'call'
                 ? 'bg-[#fbbf24] text-[#6c4f00] shadow-[0_0_12px_rgba(251,191,36,0.3)]'
                 : 'text-[#d3c5ac] hover:text-[#e1e2e8]'
             }`}
           >
-            Live AI Voice Call
+            🎙️ Live AI Voice Call
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('schedule')}
-            className={`py-2 text-center rounded-md font-bold transition-all cursor-pointer ${
+            className={`py-2 text-center rounded font-bold transition-all cursor-pointer ${
               activeTab === 'schedule'
                 ? 'bg-[#fbbf24] text-[#6c4f00] shadow-[0_0_12px_rgba(251,191,36,0.3)]'
                 : 'text-[#d3c5ac] hover:text-[#e1e2e8]'
             }`}
           >
-            Schedule AI Callback
+            📅 Schedule AI Callback
           </button>
         </div>
 
@@ -283,36 +369,34 @@ export default function AIVoiceCallModal({
         {activeTab === 'call' && (
           <div className="flex-1 flex flex-col overflow-hidden">
             {callStatus === 'idle' && (
-              <div className="p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-5 my-auto">
+              <div className="p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-4 my-auto">
                 <div className="relative">
-                  <div className="w-20 h-20 rounded-full bg-[#fbbf24]/20 border-2 border-[#fbbf24] flex items-center justify-center text-[#ffe1a7] shadow-[0_0_30px_rgba(251,191,36,0.3)]">
+                  <div className="w-20 h-20 rounded-full bg-[#fbbf24]/20 border-2 border-[#fbbf24] flex items-center justify-center text-[#ffe1a7] shadow-[0_0_35px_rgba(251,191,36,0.35)]">
                     <PhoneCall className="w-10 h-10 text-[#fbbf24] animate-bounce" />
                   </div>
                 </div>
 
-                <div className="space-y-2 max-w-sm">
-                  <h3 className="font-headline-sm text-xl text-[#e1e2e8] font-bold">
-                    Start Real-Time Voice Booking
+                <div className="space-y-1.5 max-w-sm">
+                  <h3 className="font-headline-sm text-lg sm:text-xl text-[#e1e2e8] font-bold">
+                    Start Voice Booking Call
                   </h3>
                   <p className="font-body-sm text-xs text-[#d3c5ac] leading-relaxed">
-                    Connect directly to our voice AI dispatcher. Speak naturally to diagnose roof damage, determine urgency, and book a mobile crew without filling out forms.
+                    Speak directly with our automated AI emergency dispatcher. State your damage and address to lock in emergency tarping or drone inspection in seconds.
                   </p>
                 </div>
 
-                <div className="flex items-center gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={startCall}
-                    className="inline-flex items-center gap-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-lg text-sm font-bold px-8 py-3.5 rounded-full shadow-[0_0_24px_rgba(251,191,36,0.4)] transition-all active:scale-95 cursor-pointer"
-                  >
-                    <Phone className="w-4 h-4 fill-current" />
-                    <span>Initiate Voice Call</span>
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={startCall}
+                  className="inline-flex items-center gap-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-lg text-sm font-bold px-8 py-3.5 rounded-full shadow-[0_0_25px_rgba(251,191,36,0.45)] transition-all active:scale-95 cursor-pointer"
+                >
+                  <Phone className="w-4 h-4 fill-current" />
+                  <span>Connect Voice Call Now</span>
+                </button>
 
-                <div className="pt-2 text-[11px] font-code-telemetry text-[#9c8f79] flex items-center gap-2">
+                <div className="text-[11px] font-code-telemetry text-[#8c8273] flex items-center gap-2">
                   <ShieldAlert className="w-3.5 h-3.5 text-[#fbbf24]" />
-                  <span>Supports audio and prompt input • 100% private</span>
+                  <span>Supports microphone voice audio or one-tap speech chips</span>
                 </div>
               </div>
             )}
@@ -324,10 +408,10 @@ export default function AIVoiceCallModal({
                 </div>
                 <div>
                   <h4 className="font-headline-sm text-lg text-[#e1e2e8] font-bold">
-                    Connecting to Central Texas Dispatch...
+                    Routing to Central Texas Dispatch...
                   </h4>
                   <p className="font-code-telemetry text-xs text-[#ffe1a7] mt-1">
-                    Route: Austin MoPac Station // Encrypted Link
+                    Station: Austin MoPac Command // Voice Channel Open
                   </p>
                 </div>
               </div>
@@ -336,61 +420,63 @@ export default function AIVoiceCallModal({
             {(callStatus === 'connected' || callStatus === 'ended') && (
               <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Visualizer & Call Controls Bar */}
-                <div className="p-4 bg-[#1d2024] border-b border-[#323539] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="font-code-telemetry text-sm font-bold text-[#ffe1a7] bg-[#0b0e12] px-2.5 py-1 rounded border border-[#4f4633]/50">
+                <div className="px-3 py-2.5 bg-[#1d2024] border-b border-[#323539] flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <span className="font-code-telemetry text-xs font-bold text-[#ffe1a7] bg-[#0b0e12] px-2 py-0.5 rounded border border-[#4f4633]/50">
                       {formatTimer(callDuration)}
                     </span>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1.5">
                       <span className={`w-2 h-2 rounded-full ${callStatus === 'connected' ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></span>
                       <span className="font-code-telemetry text-xs text-[#d3c5ac]">
-                        {callStatus === 'connected' ? (isAiSpeaking ? 'AI Speaking...' : 'Listening...') : 'Call Ended'}
+                        {callStatus === 'connected' ? (isAiSpeaking ? 'AI Speaking...' : isListeningMic ? 'Listening to your voice...' : 'Online') : 'Call Finished'}
                       </span>
                     </div>
                   </div>
 
                   {/* Audio Controls */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5">
                     <button
                       type="button"
                       onClick={() => setSoundEnabled(!soundEnabled)}
-                      className={`p-2 rounded-full border transition-colors cursor-pointer ${
+                      className={`p-1.5 rounded-full border transition-colors cursor-pointer ${
                         soundEnabled
                           ? 'bg-[#272a2e] text-[#ffe1a7] border-[#4f4633]'
                           : 'bg-[#93000a]/20 text-[#ffb4ab] border-[#93000a]'
                       }`}
                       title={soundEnabled ? "Mute Voice Audio" : "Enable Voice Audio"}
                     >
-                      {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                      {soundEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsMuted(!isMuted)}
-                      className={`p-2 rounded-full border transition-colors cursor-pointer ${
-                        !isMuted
-                          ? 'bg-[#272a2e] text-[#ffe1a7] border-[#4f4633]'
-                          : 'bg-[#93000a]/20 text-[#ffb4ab] border-[#93000a]'
-                      }`}
-                      title={isMuted ? "Unmute Microphone" : "Mute Microphone"}
-                    >
-                      {isMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                    </button>
+                    {callStatus === 'connected' && (
+                      <button
+                        type="button"
+                        onClick={toggleMicListening}
+                        className={`p-1.5 rounded-full border transition-colors cursor-pointer ${
+                          isListeningMic
+                            ? 'bg-[#fbbf24] text-[#6c4f00] border-[#fbbf24] animate-pulse'
+                            : 'bg-[#272a2e] text-[#ffe1a7] border-[#4f4633]'
+                        }`}
+                        title={isListeningMic ? "Microphone active (listening)" : "Click to speak via microphone"}
+                      >
+                        {isListeningMic ? <Mic className="w-3.5 h-3.5" /> : <MicOff className="w-3.5 h-3.5" />}
+                      </button>
+                    )}
                     {callStatus === 'connected' ? (
                       <button
                         type="button"
                         onClick={endCall}
-                        className="px-3.5 py-1.5 rounded-full bg-[#93000a] hover:bg-[#aa091b] text-white font-label-md text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                        className="px-3 py-1 rounded-full bg-[#93000a] hover:bg-[#aa091b] text-white font-label-md text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
                       >
-                        <PhoneOff className="w-3.5 h-3.5" />
+                        <PhoneOff className="w-3 h-3" />
                         <span>Hang Up</span>
                       </button>
                     ) : (
                       <button
                         type="button"
                         onClick={startCall}
-                        className="px-3.5 py-1.5 rounded-full bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-md text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                        className="px-3 py-1 rounded-full bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-md text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
                       >
-                        <PhoneCall className="w-3.5 h-3.5" />
+                        <PhoneCall className="w-3 h-3" />
                         <span>Call Again</span>
                       </button>
                     )}
@@ -398,85 +484,103 @@ export default function AIVoiceCallModal({
                 </div>
 
                 {/* Animated Glowing Waveform (Active when AI speaks) */}
-                <div className="h-14 bg-[#0b0e12] border-b border-[#272a2e] flex items-center justify-center gap-1 px-4">
-                  {[6, 18, 12, 28, 20, 36, 16, 24, 10, 26, 18, 12].map((h, i) => (
+                <div className="h-10 bg-[#0b0e12] border-b border-[#272a2e] flex items-center justify-center gap-1 px-4">
+                  {[6, 16, 10, 24, 18, 30, 14, 20, 8, 22, 16, 10].map((h, i) => (
                     <div
                       key={i}
                       className={`w-1 rounded-full transition-all duration-150 ${
                         isAiSpeaking
                           ? 'bg-[#fbbf24] animate-pulse'
+                          : isListeningMic
+                          ? 'bg-[#3b82f6] animate-pulse'
                           : callStatus === 'connected'
                           ? 'bg-[#4f4633] h-2'
                           : 'bg-[#272a2e] h-1'
                       }`}
-                      style={{ height: isAiSpeaking ? `${h}px` : '4px' }}
+                      style={{ height: (isAiSpeaking || isListeningMic) ? `${h}px` : '4px' }}
                     ></div>
                   ))}
                 </div>
 
                 {/* Live Transcript Stream */}
-                <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#111418]">
+                <div className="flex-1 p-3.5 overflow-y-auto space-y-2.5 bg-[#111418]">
                   {conversation.map((msg, idx) => (
                     <div
                       key={idx}
-                      className={`flex gap-2.5 ${
+                      className={`flex gap-2 ${
                         msg.speaker === 'user' ? 'justify-end' : 'justify-start'
                       }`}
                     >
                       {msg.speaker === 'ai' && (
-                        <div className="w-7 h-7 rounded-full bg-[#fbbf24]/20 border border-[#fbbf24]/40 flex items-center justify-center text-[#fbbf24] shrink-0 text-xs font-bold mt-0.5">
+                        <div className="w-6 h-6 rounded-full bg-[#fbbf24]/20 border border-[#fbbf24]/40 flex items-center justify-center text-[#fbbf24] shrink-0 text-[10px] font-bold mt-0.5">
                           AI
                         </div>
                       )}
                       <div
-                        className={`max-w-[85%] p-3 rounded-xl text-xs sm:text-sm font-body-sm leading-relaxed ${
+                        className={`max-w-[86%] p-3 rounded-xl text-xs sm:text-sm font-body-sm leading-relaxed ${
                           msg.speaker === 'user'
                             ? 'bg-[#272a2e] text-[#e1e2e8] border border-[#4f4633]/40'
                             : 'bg-[#1d2024] text-[#ffe1a7] border-l-2 border-[#fbbf24]'
                         }`}
                       >
-                        <div className="font-code-telemetry text-[10px] text-[#9c8f79] mb-1">
+                        <div className="font-code-telemetry text-[9px] text-[#9c8f79] mb-1">
                           {msg.speaker === 'ai' ? 'StormGuard AI Dispatcher' : 'You (Homeowner)'}
                         </div>
                         {msg.text}
                       </div>
                     </div>
                   ))}
-                  <div ref={messagesEndRef} />
-                </div>
 
-                {/* Dispatch Confirmation Card if triggered */}
-                {bookingConfirmed && (
-                  <div className="p-3 bg-[#fbbf24]/10 border-t border-[#fbbf24] flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-[#fbbf24] shrink-0" />
-                      <div>
-                        <span className="font-code-telemetry font-bold text-[#ffe1a7]">
-                          {bookingConfirmed.token} CONFIRMED
+                  {/* Official Booking Confirmation Card */}
+                  {bookingConfirmed && (
+                    <div className="mt-3 p-3 bg-[#fbbf24]/10 border-2 border-[#fbbf24] rounded-xl text-xs space-y-2 text-[#e1e2e8]">
+                      <div className="flex items-center justify-between">
+                        <span className="font-code-telemetry font-bold text-[#fbbf24] flex items-center gap-1.5 text-xs">
+                          <CheckCircle2 className="w-4 h-4 text-[#fbbf24]" />
+                          VOICE DISPATCH VOUCHER #{bookingConfirmed.token}
                         </span>
-                        <div className="text-[11px] text-[#d3c5ac]">
-                          {bookingConfirmed.crew} • ETA: {bookingConfirmed.eta}
-                        </div>
+                        <span className="font-code-telemetry text-[9px] bg-[#fbbf24] text-[#6c4f00] px-2 py-0.5 rounded font-bold">
+                          {bookingConfirmed.status}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-[#d3c5ac] space-y-0.5">
+                        <p><span className="text-[#ffe1a7] font-semibold">Assigned Unit:</span> {bookingConfirmed.crew}</p>
+                        <p><span className="text-[#ffe1a7] font-semibold">Guaranteed Window:</span> {bookingConfirmed.eta}</p>
+                      </div>
+                      <div className="pt-1 flex items-center justify-between gap-2">
+                        <a
+                          href={`tel:${SITE_CONFIG.phoneRaw}`}
+                          className="flex-1 inline-flex items-center justify-center gap-1 bg-[#272a2e] hover:bg-[#323539] text-[#ffe1a7] py-1.5 px-2 rounded text-[11px] font-semibold border border-[#4f4633]"
+                        >
+                          <Phone className="w-3 h-3 text-[#fbbf24]" />
+                          <span>Call Hotline: {SITE_CONFIG.phone}</span>
+                        </a>
                       </div>
                     </div>
-                    <span className="font-code-telemetry text-[10px] text-[#fbbf24] bg-[#272a2e] px-2 py-1 rounded">
-                      SMS Alert Sent
-                    </span>
-                  </div>
-                )}
+                  )}
+
+                  <div ref={messagesEndRef} />
+                </div>
 
                 {/* Voice Quick Replies / Interactive Prompt Buttons */}
                 {callStatus === 'connected' && (
                   <div className="p-3 bg-[#1d2024] border-t border-[#323539] space-y-2">
-                    <div className="text-[10px] font-code-telemetry text-[#9c8f79] uppercase font-bold">
-                      Tap quick response to speak:
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-code-telemetry text-[#9c8f79] uppercase font-bold">
+                        Tap response to speak to AI:
+                      </span>
+                      {isListeningMic && (
+                        <span className="text-[10px] font-code-telemetry text-[#fbbf24] animate-pulse">
+                          ● Mic Active - Speak now
+                        </span>
+                      )}
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {[
-                        "💧 Water is leaking through my ceiling",
+                        "💧 Active water leak through my ceiling",
                         "🌪️ Hail dented my shingles in Austin",
                         "📍 My address is 1420 Barton Springs Rd, 78704",
-                        "📅 Book drone inspection for tomorrow 10am",
+                        "📅 Confirm drone inspection for tomorrow",
                       ].map((phrase, i) => (
                         <button
                           key={i}
@@ -501,16 +605,29 @@ export default function AIVoiceCallModal({
                         type="text"
                         value={userInput}
                         onChange={(e) => setUserInput(e.target.value)}
-                        placeholder="Or type what you want to say to the AI..."
-                        className="flex-1 bg-[#111418] border border-[#4f4633]/50 text-[#e1e2e8] px-3 py-2 rounded text-xs focus:outline-none focus:border-[#fbbf24]"
+                        placeholder="Type or click mic to speak to AI dispatcher..."
+                        className="flex-1 bg-[#111418] border border-[#4f4633]/50 text-[#e1e2e8] px-3 py-1.5 rounded text-xs focus:outline-none focus:border-[#fbbf24]"
                       />
+                      <button
+                        type="button"
+                        onClick={toggleMicListening}
+                        className={`px-2.5 py-1.5 rounded text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer border ${
+                          isListeningMic
+                            ? 'bg-[#fbbf24] text-[#6c4f00] border-[#fbbf24]'
+                            : 'bg-[#272a2e] text-[#ffe1a7] border-[#4f4633]'
+                        }`}
+                        title="Click to speak"
+                      >
+                        <Mic className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">{isListeningMic ? 'Listening' : 'Mic'}</span>
+                      </button>
                       <button
                         type="submit"
                         disabled={!userInput.trim()}
-                        className="px-3 py-2 bg-[#fbbf24] text-[#6c4f00] font-bold rounded text-xs flex items-center gap-1 disabled:opacity-50 cursor-pointer"
+                        className="px-3.5 py-1.5 bg-[#fbbf24] text-[#6c4f00] font-bold rounded text-xs flex items-center gap-1 disabled:opacity-40 cursor-pointer"
                       >
                         <Send className="w-3.5 h-3.5" />
-                        <span>Speak</span>
+                        <span>Send</span>
                       </button>
                     </form>
                   </div>
@@ -522,11 +639,11 @@ export default function AIVoiceCallModal({
 
         {/* Tab 2: Schedule Callback Form */}
         {activeTab === 'schedule' && (
-          <div className="p-5 sm:p-6 overflow-y-auto">
+          <div className="p-4 sm:p-6 overflow-y-auto">
             {schedSuccess ? (
               <div className="p-6 text-center space-y-4">
                 <div className="w-14 h-14 rounded-full bg-[#fbbf24]/20 border border-[#fbbf24] flex items-center justify-center text-[#fbbf24] mx-auto">
-                  <CheckCircle className="w-8 h-8" />
+                  <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <div>
                   <span className="font-code-telemetry text-xs text-[#ffe1a7] font-bold">
@@ -537,7 +654,7 @@ export default function AIVoiceCallModal({
                   </h3>
                 </div>
                 <p className="font-body-sm text-xs text-[#d3c5ac] max-w-sm mx-auto leading-relaxed">
-                  Our automated voice dispatch agent will ring your phone directly. Priority queue is locked for your address.
+                  Our automated voice dispatch system will ring your phone directly. Priority queue is locked for your address.
                 </p>
                 <div className="pt-2 flex justify-center">
                   <button
@@ -546,17 +663,17 @@ export default function AIVoiceCallModal({
                       setSchedSuccess(null);
                       onClose();
                     }}
-                    className="px-6 py-2 rounded bg-[#fbbf24] text-[#6c4f00] font-bold text-xs hover:bg-[#f9bd22]"
+                    className="px-6 py-2 rounded bg-[#fbbf24] text-[#6c4f00] font-bold text-xs hover:bg-[#f9bd22] cursor-pointer"
                   >
                     Done
                   </button>
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleScheduleSubmit} className="space-y-4">
-                <div className="flex items-center gap-2 text-xs font-code-telemetry text-[#ffe1a7]">
+              <form onSubmit={handleScheduleSubmit} className="space-y-3.5">
+                <div className="flex items-center gap-2 text-xs font-code-telemetry text-[#ffe1a7] bg-[#1d2024] p-2 rounded border border-[#4f4633]/40">
                   <Calendar className="w-4 h-4 text-[#fbbf24]" />
-                  <span>Request Automated Voice Call Back</span>
+                  <span>Request Automated AI Voice Call Back</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Phone, Menu, X, ArrowRight, ChevronDown } from 'lucide-react';
+import { Phone, Menu, X, ArrowRight, ChevronDown, Bot } from 'lucide-react';
 import { SITE_CONFIG, NAV_LINKS } from '@/constants/data';
 
 // Primary links shown directly on desktop
@@ -212,6 +212,19 @@ export default function Header() {
               >
                 <span className="h-2 w-2 rounded-full bg-[#fbbf24] animate-ping"></span>
                 <span>Launch AI Voice Call Booking</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  if (typeof window !== 'undefined' && (window as any).openStormGuardAIChat) {
+                    (window as any).openStormGuardAIChat();
+                  }
+                }}
+                className="w-full flex items-center justify-center gap-2 bg-[#191c20] hover:bg-[#272a2e] text-[#fbbf24] border border-[#4f4633]/50 font-label-md text-xs font-bold py-2 rounded text-center transition-colors cursor-pointer"
+              >
+                <Bot className="w-3.5 h-3.5" />
+                <span>Open 24/7 AI Triage &amp; Booking Chat</span>
               </button>
               <Link
                 href="/#quick-form"
