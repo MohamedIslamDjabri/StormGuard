@@ -11,13 +11,11 @@ export default function Footer() {
           {/* Col 1: Brand & Credentials */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-2">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={SITE_CONFIG.logoUrl}
                 alt="StormGuard Roofing Logo"
-                width={28}
-                height={28}
                 className="h-7 w-auto object-contain"
-                referrerPolicy="no-referrer"
               />
               <span className="font-headline-sm text-lg text-[#e1e2e8] uppercase tracking-tight font-bold">
                 {SITE_CONFIG.name}

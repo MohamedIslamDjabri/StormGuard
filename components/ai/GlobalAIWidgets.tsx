@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import FloatingAIChat from './FloatingAIChat';
 import AIVoiceCallModal from './AIVoiceCallModal';
 
 export default function GlobalAIWidgets() {
@@ -28,13 +27,11 @@ export default function GlobalAIWidgets() {
   }, []);
 
   return (
-    <>
-      <FloatingAIChat onOpenVoiceModal={openVoiceCall} />
-      <AIVoiceCallModal
-        isOpen={voiceModalOpen}
-        onClose={() => setVoiceModalOpen(false)}
-        defaultMode={voiceModalMode}
-      />
-    </>
+    <AIVoiceCallModal
+      isOpen={voiceModalOpen}
+      onClose={() => setVoiceModalOpen(false)}
+      defaultMode={voiceModalMode}
+    />
   );
 }
+

@@ -190,21 +190,14 @@ export default function AIVoiceReceptionist() {
               </div>
 
               {/* Call to action button */}
-              <div className="mt-4 flex flex-col sm:flex-row gap-2">
+              <div className="mt-4">
                 <button
                   type="button"
                   onClick={() => handleOpenCallModal('call')}
-                  className="flex-1 inline-flex items-center justify-center gap-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-lg text-xs font-bold py-3 rounded transition-colors shadow-[0_0_20px_rgba(251,191,36,0.25)] active:scale-95 cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-lg text-xs font-bold py-3 rounded transition-colors shadow-[0_0_20px_rgba(251,191,36,0.25)] active:scale-95 cursor-pointer"
                 >
                   <PhoneCall className="w-4 h-4" />
-                  <span>Start AI Voice Call Now</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleOpenCallModal('schedule')}
-                  className="inline-flex items-center justify-center gap-1.5 bg-[#272a2e] hover:bg-[#323539] text-[#ffe1a7] font-label-md text-xs py-3 px-4 rounded border border-[#4f4633]/60 transition-colors cursor-pointer"
-                >
-                  <span>Schedule Callback</span>
+                  <span>Request AI Emergency Call Back (30s Wait)</span>
                 </button>
               </div>
             </div>

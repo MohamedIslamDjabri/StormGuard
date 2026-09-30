@@ -17,7 +17,7 @@ export default function HeroSection({
   showBadges = true,
 }: HeroSectionProps) {
   return (
-    <section className="relative w-full -mt-20 overflow-hidden bg-[#111418]">
+    <section className="relative w-full overflow-hidden bg-[#111418]">
       {/* Background Image with Scrim Gradients */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -35,7 +35,7 @@ export default function HeroSection({
       </div>
 
       {/* Hero Content Container */}
-      <div className="relative z-10 w-full px-4 md:px-8 lg:px-16 pt-32 pb-10 md:pb-16">
+      <div className="relative z-10 w-full px-4 md:px-8 lg:px-16 pt-10 md:pt-14 pb-10 md:pb-16">
         <div className="max-w-4xl space-y-4">
           {/* Emergency Live Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#93000a]/30 border border-[#ffb4ab]/30 backdrop-blur-md shadow-lg">

@@ -12,6 +12,9 @@ import {
   Flame,
   Shield,
   HelpCircle,
+  Send,
+  Loader2,
+  Sparkles,
 } from 'lucide-react';
 import { TRIAGE_OPTIONS, TriageOption } from '@/constants/data';
 
@@ -19,15 +22,39 @@ export default function AIStormAssistant() {
   const [selectedKey, setSelectedKey] = useState<string>('leak');
   const [hasWaterEntering, setHasWaterEntering] = useState<boolean | null>(true);
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
+  const [customQuery, setCustomQuery] = useState('');
+  const [customReply, setCustomReply] = useState<string | null>(null);
+  const [chatLoading, setChatLoading] = useState(false);
 
   const currentOption: TriageOption = TRIAGE_OPTIONS[selectedKey] || TRIAGE_OPTIONS.leak;
 
   const handleSelect = (key: string) => {
     setIsAnalyzing(true);
     setSelectedKey(key);
+    setCustomReply(null);
     setTimeout(() => {
       setIsAnalyzing(false);
     }, 300);
+  };
+
+  const handleCustomChat = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customQuery.trim() || chatLoading) return;
+
+    setChatLoading(true);
+    try {
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userMessage: customQuery }),
+      });
+      const data = await res.json();
+      setCustomReply(data.reply || "Our emergency response network is operational. For immediate 2-hour tarp deployment, call (555) 718-STORM.");
+    } catch {
+      setCustomReply("Active storm dispatch units are standing by across Central Texas. For immediate assistance, call (555) 718-STORM or submit your inspection request below.");
+    } finally {
+      setChatLoading(false);
+    }
   };
 
   return (
@@ -226,6 +253,36 @@ export default function AIStormAssistant() {
                   </>
                 )}
               </div>
+
+              {/* Custom AI Chat Query Result (if asked) */}
+              {customReply && (
+                <div className="p-3.5 rounded-lg bg-[#272a2e] border-l-2 border-[#fbbf24] text-[#e1e2e8] text-xs sm:text-sm animate-in fade-in duration-200 space-y-1.5">
+                  <div className="flex items-center gap-1.5 font-code-telemetry text-xs text-[#ffe1a7] font-bold">
+                    <Sparkles className="w-3.5 h-3.5 text-[#fbbf24]" />
+                    <span>StormGuard AI Analysis:</span>
+                  </div>
+                  <p className="leading-relaxed text-[#d3c5ac]">{customReply}</p>
+                </div>
+              )}
+
+              {/* In-Card Interactive AI Chat Bar */}
+              <form onSubmit={handleCustomChat} className="pt-1 flex gap-2">
+                <input
+                  type="text"
+                  value={customQuery}
+                  onChange={(e) => setCustomQuery(e.target.value)}
+                  placeholder="Or ask AI anything (e.g. Does insurance cover Class 4? What if my roof is leaking?)..."
+                  className="flex-1 bg-[#0b0e12] border border-[#4f4633]/60 focus:border-[#fbbf24] text-[#e1e2e8] px-3 py-2 rounded text-xs focus:outline-none transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={chatLoading || !customQuery.trim()}
+                  className="px-3.5 py-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-bold rounded text-xs flex items-center gap-1 transition-all disabled:opacity-50 cursor-pointer shadow shrink-0"
+                >
+                  {chatLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                  <span>Ask AI</span>
+                </button>
+              </form>
             </div>
           </div>
         </div>

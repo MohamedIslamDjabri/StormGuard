@@ -65,7 +65,7 @@ export default function RootLayout({
       </head>
       <body className="bg-[#111418] text-[#e1e2e8] min-h-screen flex flex-col font-body-md antialiased selection:bg-[#fbbf24] selection:text-[#6c4f00]">
         <Header />
-        <main className="flex-1 w-full pt-20 bg-[#111418]">
+        <main className="flex-1 w-full bg-[#111418]">
           {children}
         </main>
         <GlobalAIWidgets />
