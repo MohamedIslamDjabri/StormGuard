@@ -11,7 +11,7 @@ const iconMap: Record<string, any> = {
 export default function ProcessSteps() {
   return (
     <section className="w-full bg-[#191c20] border-y border-[#4f4633]/30 py-12 md:py-16">
-      <div className="w-full px-4 md:px-8 lg:px-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-8">
           <span className="font-code-telemetry text-xs text-[#ffe1a7] uppercase font-bold tracking-wider">
             Streamlined Protocol

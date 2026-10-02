@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Bot, PhoneCall, Sparkles } from 'lucide-react';
+import { Bot, PhoneCall } from 'lucide-react';
 import AIVoiceCallModal from './AIVoiceCallModal';
 import FloatingAIChat from './FloatingAIChat';
 
@@ -40,36 +40,36 @@ export default function GlobalAIWidgets() {
 
   return (
     <>
-      {/* Floating Tactical Dispatch Dock (positioned above mobile bottom bar) */}
+      {/* Desktop Floating Tactical Dispatch Dock (Clean, unobtrusive, bottom-right) */}
       {!chatOpen && !voiceModalOpen && (
         <aside
           aria-label="AI Dispatch & Booking Widget"
-          className="fixed bottom-14 sm:bottom-16 right-2 sm:right-6 z-40 flex items-center gap-1.5 sm:gap-2 bg-[#111418]/95 p-1 rounded-full border border-[#fbbf24]/50 shadow-[0_4px_25px_rgba(0,0,0,0.8)] backdrop-blur-md"
+          className="hidden sm:flex fixed bottom-6 right-6 z-40 items-center gap-2 bg-[#111418]/95 p-1.5 rounded-full border border-[#fbbf24]/50 shadow-[0_8px_30px_rgba(0,0,0,0.85)] backdrop-blur-md transition-all hover:scale-105"
         >
-          {/* AI Chat Button */}
+          {/* AI Chat & Booking Button */}
           <button
             type="button"
             onClick={openChat}
-            className="flex items-center gap-1.5 bg-[#1d2024] hover:bg-[#272a2e] text-[#ffe1a7] px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full border border-[#fbbf24]/40 transition-all active:scale-95 cursor-pointer text-xs font-bold group shadow"
+            className="flex items-center gap-2 bg-[#1a1f26] hover:bg-[#222832] text-[#ffe1a7] px-3.5 py-2 rounded-full border border-[#fbbf24]/40 transition-all active:scale-95 cursor-pointer text-xs font-bold group shadow"
+            title="Open StormGuard AI Triage & Direct Booking"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#fbbf24] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#fbbf24]"></span>
             </span>
             <Bot className="w-3.5 h-3.5 text-[#fbbf24] group-hover:rotate-12 transition-transform" />
-            <span className="hidden xs:inline">AI Chat &amp; Booking</span>
-            <span className="xs:hidden">Chat</span>
+            <span>AI Chat &amp; Booking</span>
           </button>
 
           {/* AI Voice Call Button */}
           <button
             type="button"
             onClick={openVoiceCall}
-            className="flex items-center gap-1.5 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full transition-all active:scale-95 cursor-pointer text-xs font-bold shadow-[0_0_15px_rgba(251,191,36,0.35)]"
+            className="flex items-center gap-2 bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] hover:from-[#f9bd22] hover:to-[#d97706] text-[#111418] px-4 py-2 rounded-full transition-all active:scale-95 cursor-pointer text-xs font-black shadow-[0_0_16px_rgba(251,191,36,0.35)]"
+            title="Start Live AI Emergency Voice Call"
           >
             <PhoneCall className="w-3.5 h-3.5 fill-current" />
-            <span className="hidden xs:inline">AI Voice Call</span>
-            <span className="xs:hidden">Voice</span>
+            <span>AI Voice Call</span>
           </button>
         </aside>
       )}

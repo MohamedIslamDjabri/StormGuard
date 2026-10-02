@@ -4,7 +4,7 @@ import { Star, ShieldCheck } from 'lucide-react';
 export default function StatsSection() {
   return (
     <section className="w-full bg-[#191c20] border-y border-[#4f4633]/30 py-12 md:py-16">
-      <div className="w-full px-4 md:px-8 lg:px-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Telemetry Stats Row */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pb-12 border-b border-[#323539]">
           {STATS.map((stat, idx) => (

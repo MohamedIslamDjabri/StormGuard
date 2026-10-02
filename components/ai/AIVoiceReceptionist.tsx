@@ -84,7 +84,7 @@ export default function AIVoiceReceptionist() {
 
   return (
     <section className="w-full bg-[#191c20] border-y border-[#4f4633]/30 py-12 md:py-16">
-      <div className="w-full px-4 md:px-8 lg:px-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Voice Tech Interactive Mockup */}
           <div className="lg:col-span-6">
@@ -202,10 +202,10 @@ export default function AIVoiceReceptionist() {
                 <button
                   type="button"
                   onClick={() => handleOpenCallModal('call')}
-                  className="w-full inline-flex items-center justify-center gap-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-lg text-xs font-bold py-3 rounded transition-colors shadow-[0_0_20px_rgba(251,191,36,0.25)] active:scale-95 cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] hover:from-[#f9bd22] hover:to-[#d97706] text-[#111418] font-label-lg text-xs font-black py-3.5 rounded-xl transition-all shadow-[0_0_20px_rgba(251,191,36,0.35)] active:scale-95 cursor-pointer"
                 >
-                  <PhoneCall className="w-4 h-4" />
-                  <span>Request AI Emergency Call Back (30s Wait)</span>
+                  <PhoneCall className="w-4 h-4 fill-current" />
+                  <span>Start Live AI Voice Call (Instant Dispatch)</span>
                 </button>
               </div>
             </div>

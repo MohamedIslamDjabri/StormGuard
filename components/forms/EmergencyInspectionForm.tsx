@@ -53,8 +53,9 @@ export default function EmergencyInspectionForm({
   };
 
   return (
-    <section className="w-full px-4 md:px-8 lg:px-16 py-12 md:py-16" id="quick-form">
-      <div className="w-full rounded-2xl bg-gradient-to-br from-[#1d2024] via-[#272a2e] to-[#1d2024] border border-[#4f4633]/60 shadow-2xl p-6 md:p-10 relative overflow-hidden">
+    <section className="w-full py-12 md:py-16 overflow-hidden" id="quick-form">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full rounded-2xl bg-gradient-to-br from-[#1d2024] via-[#272a2e] to-[#1d2024] border border-[#4f4633]/60 shadow-2xl p-6 md:p-10 relative overflow-hidden">
         {/* Ambient Glow Behind Form */}
         <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-[#fbbf24]/10 blur-3xl pointer-events-none"></div>
 
@@ -134,9 +135,9 @@ export default function EmergencyInspectionForm({
                 <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
                   <a
                     href={`tel:${SITE_CONFIG.phoneRaw}`}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#fbbf24] text-[#6c4f00] font-label-md text-xs font-bold px-6 py-2.5 rounded shadow-lg"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] hover:from-[#f9bd22] text-[#111418] font-label-md text-xs font-black px-6 py-3 rounded-xl shadow-lg active:scale-95 transition-all"
                   >
-                    <Phone className="w-4 h-4" />
+                    <Phone className="w-4 h-4 fill-current" />
                     <span>Call Dispatch Now: {SITE_CONFIG.phone}</span>
                   </a>
                   <button
@@ -147,7 +148,7 @@ export default function EmergencyInspectionForm({
                       setPhone('');
                       setZip('');
                     }}
-                    className="w-full sm:w-auto px-4 py-2 rounded text-xs text-[#d3c5ac] hover:text-white bg-[#272a2e]"
+                    className="w-full sm:w-auto px-4 py-3 rounded-xl text-xs font-semibold text-[#cbd5e1] hover:text-white bg-[#222832] border border-[#3b4352] transition-colors"
                   >
                     Submit Another Address
                   </button>
@@ -325,7 +326,7 @@ export default function EmergencyInspectionForm({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full inline-flex items-center justify-center gap-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-lg text-sm font-bold py-3.5 rounded transition-all shadow-[0_0_24px_rgba(251,191,36,0.35)] active:scale-[0.99] cursor-pointer disabled:opacity-75"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] hover:from-[#f9bd22] hover:to-[#d97706] text-[#111418] font-label-lg text-sm font-black py-4 rounded-xl transition-all shadow-[0_0_24px_rgba(251,191,36,0.4)] active:scale-[0.99] cursor-pointer disabled:opacity-75"
                 >
                   {loading ? (
                     <>
@@ -347,6 +348,7 @@ export default function EmergencyInspectionForm({
             )}
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

@@ -228,21 +228,21 @@ export default function FloatingAIChat({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-14 sm:bottom-16 right-2 sm:right-6 z-50 w-[95vw] sm:w-[410px] h-[550px] max-h-[82vh] rounded-2xl bg-[#111418] border-2 border-[#fbbf24]/60 shadow-[0_12px_45px_rgba(0,0,0,0.95)] flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-200">
+    <div className="fixed bottom-12 sm:bottom-6 right-2 sm:right-6 z-50 w-[calc(100vw-1rem)] sm:w-[420px] max-w-[calc(100vw-1rem)] h-[560px] max-h-[85vh] rounded-2xl bg-[#111418] border border-[#fbbf24]/60 shadow-[0_16px_50px_rgba(0,0,0,0.95)] flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-200">
       {/* Top Tactical Header */}
-      <div className="px-3.5 py-3 bg-[#1d2024] border-b border-[#323539] flex items-center justify-between">
+      <div className="px-3.5 py-3 bg-[#181c22] border-b border-[#2b3038] flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-full bg-[#fbbf24]/20 border border-[#fbbf24]/50 flex items-center justify-center text-[#fbbf24]">
             <Bot className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-headline-sm text-xs text-[#e1e2e8] font-bold">
+              <span className="font-headline-sm text-xs text-[#f1f5f9] font-bold">
                 StormGuard AI Assistant
               </span>
               <span className="h-1.5 w-1.5 rounded-full bg-[#fbbf24] animate-pulse"></span>
             </div>
-            <span className="font-code-telemetry text-[10px] text-[#ffe1a7]">
+            <span className="font-code-telemetry text-[10px] text-[#fbbf24]">
               Austin Command Dispatch • 24/7 Active
             </span>
           </div>
@@ -266,7 +266,7 @@ export default function FloatingAIChat({
           <button
             type="button"
             onClick={() => setIsOpen(false)}
-            className="p-1.5 rounded-lg text-[#d3c5ac] hover:text-white hover:bg-[#272a2e] transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-[#94a3b8] hover:text-white hover:bg-[#202630] transition-colors cursor-pointer"
             aria-label="Close Chat"
           >
             <X className="w-4 h-4" />

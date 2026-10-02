@@ -13,9 +13,9 @@ export const metadata: Metadata = {
 
 export default function StormDamagePage() {
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full overflow-x-hidden max-w-full">
       {/* Subpage Hero */}
-      <section className="relative w-full overflow-hidden bg-[#111418] py-10 md:py-14 px-4 md:px-8 lg:px-16">
+      <section className="relative w-full overflow-hidden bg-[#111418] py-10 md:py-14 px-4 sm:px-6 lg:px-8">
         <div className="absolute inset-0 z-0 opacity-25">
           <Image
             src={SITE_CONFIG.heroImage}
@@ -28,7 +28,8 @@ export default function StormDamagePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#111418] via-[#111418]/90 to-transparent"></div>
         </div>
 
-        <div className="relative z-10 max-w-4xl space-y-4">
+        <div className="relative z-10 max-w-7xl mx-auto space-y-4">
+          <div className="max-w-4xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#93000a]/20 border border-[#93000a]/40 text-[#ffb4ab] font-code-telemetry text-xs font-bold uppercase">
             <span>Severe Weather Restoration</span>
           </div>
@@ -42,33 +43,35 @@ export default function StormDamagePage() {
           <div className="flex flex-wrap gap-4 pt-2">
             <Link
               href="#triage-terminal"
-              className="inline-flex items-center gap-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-lg text-xs font-bold px-6 py-3 rounded shadow-lg"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] hover:from-[#f9bd22] text-[#111418] font-label-lg text-xs font-black px-6 py-3.5 rounded-xl shadow-[0_0_16px_rgba(251,191,36,0.35)] active:scale-95 transition-all"
             >
               <span>Run AI Damage Diagnostic</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <a
               href={`tel:${SITE_CONFIG.phoneRaw}`}
-              className="inline-flex items-center gap-2 bg-[#272a2e] hover:bg-[#323539] text-[#e1e2e8] font-label-md text-xs font-semibold px-6 py-3 rounded border border-[#4f4633]/60"
+              className="inline-flex items-center gap-2 bg-[#1a1f26] hover:bg-[#222832] text-[#f1f5f9] font-label-md text-xs font-bold px-6 py-3.5 rounded-xl border border-[#3b4352] active:scale-95 transition-all"
             >
               <span>Call Hotline: {SITE_CONFIG.phone}</span>
             </a>
+          </div>
           </div>
         </div>
       </section>
 
       {/* Specific Damage Breakdown */}
-      <section className="w-full px-4 md:px-8 lg:px-16 py-12 md:py-16">
-        <div className="max-w-2xl mb-10">
-          <span className="font-code-telemetry text-xs text-[#ffe1a7] uppercase font-bold tracking-wider">
-            Damage Forensics
-          </span>
-          <h2 className="font-headline-lg text-3xl text-[#e1e2e8] font-bold mt-1">
-            Types of Texas Storm Impact We Fix
-          </h2>
-        </div>
+      <section className="w-full py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mb-10">
+            <span className="font-code-telemetry text-xs text-[#ffe1a7] uppercase font-bold tracking-wider">
+              Damage Forensics
+            </span>
+            <h2 className="font-headline-lg text-3xl text-[#e1e2e8] font-bold mt-1">
+              Types of Texas Storm Impact We Fix
+            </h2>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div id="hail" className="p-6 rounded-xl bg-[#1d2024] border border-[#4f4633]/40 space-y-3">
             <div className="w-10 h-10 rounded-lg bg-[#272a2e] flex items-center justify-center text-[#fbbf24]">
               <Disc className="w-5 h-5" />
@@ -116,6 +119,7 @@ export default function StormDamagePage() {
               <li className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-[#fbbf24]" /> Complete rafter and drywall rebuild</li>
             </ul>
           </div>
+        </div>
         </div>
       </section>
 

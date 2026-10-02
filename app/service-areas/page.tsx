@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function ServiceAreasPage() {
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full overflow-x-hidden max-w-full">
       {/* Subpage Hero */}
       <section className="relative w-full overflow-hidden bg-[#111418] py-10 md:py-14 px-4 md:px-8 lg:px-16">
         <div className="absolute inset-0 z-0 opacity-25">

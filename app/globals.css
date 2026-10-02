@@ -58,6 +58,9 @@
   html {
     scroll-behavior: smooth;
     color-scheme: dark;
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
   }
   body {
     background-color: var(--color-surface, #111418);
@@ -65,6 +68,9 @@
     font-family: var(--font-inter), "Inter", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
   }
 }
 

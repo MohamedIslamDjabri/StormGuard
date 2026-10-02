@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function InsuranceClaimsPage() {
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full overflow-x-hidden max-w-full">
       {/* Subpage Hero */}
       <section className="relative w-full overflow-hidden bg-[#111418] py-10 md:py-14 px-4 md:px-8 lg:px-16">
         <div className="absolute inset-0 z-0 opacity-25">
@@ -47,14 +47,14 @@ export default function InsuranceClaimsPage() {
           <div className="flex flex-wrap gap-4 pt-2">
             <Link
               href="#ai-claims-assistant"
-              className="inline-flex items-center gap-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-lg text-xs font-bold px-6 py-3 rounded shadow-lg"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] hover:from-[#f9bd22] text-[#111418] font-label-lg text-xs font-black px-6 py-3.5 rounded-xl shadow-[0_0_16px_rgba(251,191,36,0.35)] active:scale-95 transition-all"
             >
               <span>Explore AI Claims Assistant</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <a
               href={`tel:${SITE_CONFIG.phoneRaw}`}
-              className="inline-flex items-center gap-2 bg-[#272a2e] hover:bg-[#323539] text-[#e1e2e8] font-label-md text-xs font-semibold px-6 py-3 rounded border border-[#4f4633]/60"
+              className="inline-flex items-center gap-2 bg-[#1a1f26] hover:bg-[#222832] text-[#f1f5f9] font-label-md text-xs font-bold px-6 py-3.5 rounded-xl border border-[#3b4352] active:scale-95 transition-all"
             >
               <span>Call Claim Hotline: {SITE_CONFIG.phone}</span>
             </a>

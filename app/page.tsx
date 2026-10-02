@@ -12,7 +12,7 @@ import FAQSection from '@/components/sections/FAQSection';
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full overflow-x-hidden max-w-full">
       {/* SECTION 1: HERO SECTION */}
       <HeroSection />
 
@@ -41,10 +41,12 @@ export default function HomePage() {
       <EmergencyInspectionForm />
 
       {/* SECTION 10: SERVICE COVERAGE MAP & FAQ PREVIEW */}
-      <section className="w-full px-4 md:px-8 lg:px-16 py-12 md:py-16">
-        <ServiceAreasSection />
-        <div className="mt-12">
-          <FAQSection limit={4} />
+      <section className="w-full py-12 md:py-16 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ServiceAreasSection />
+          <div className="mt-12">
+            <FAQSection limit={4} />
+          </div>
         </div>
       </section>
     </div>

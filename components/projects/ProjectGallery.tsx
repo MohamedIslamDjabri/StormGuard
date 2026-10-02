@@ -16,7 +16,8 @@ export default function ProjectGallery({ showFilters = true }: { showFilters?: b
   });
 
   return (
-    <section className="w-full px-4 md:px-8 lg:px-16 py-12 md:py-16">
+    <section className="w-full py-12 md:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 font-code-telemetry text-xs text-[#ffe1a7] bg-[#1d2024] px-3 py-1 rounded border border-[#4f4633]/30">
@@ -206,6 +207,7 @@ export default function ProjectGallery({ showFilters = true }: { showFilters?: b
           </div>
         </div>
       )}
+      </div>
     </section>
   );
 }

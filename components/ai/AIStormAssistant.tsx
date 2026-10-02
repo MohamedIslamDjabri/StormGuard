@@ -58,8 +58,8 @@ export default function AIStormAssistant() {
   };
 
   return (
-    <section className="w-full px-4 md:px-8 lg:px-16 py-12 md:py-16" id="triage-terminal">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+    <section className="w-full py-12 md:py-16" id="triage-terminal">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         {/* Text Intro */}
         <div className="lg:col-span-5 space-y-4">
           <div className="inline-flex items-center gap-1.5 font-code-telemetry text-xs text-[#ffe1a7] bg-[#1d2024] px-3 py-1 rounded border border-[#4f4633]/40">
@@ -240,7 +240,7 @@ export default function AIStormAssistant() {
 
                       <Link
                         href="#quick-form"
-                        className="inline-flex items-center justify-center gap-1.5 bg-[#fbbf24] text-[#6c4f00] font-label-md text-xs font-bold px-4 py-2 rounded hover:bg-[#f9bd22] transition-colors shadow-[0_0_15px_rgba(251,191,36,0.3)] whitespace-nowrap active:scale-95"
+                        className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] hover:from-[#f9bd22] hover:to-[#d97706] text-[#111418] font-label-md text-xs font-black px-4 py-2.5 rounded-lg transition-all shadow-[0_0_15px_rgba(251,191,36,0.35)] whitespace-nowrap active:scale-95"
                       >
                         <span>
                           {hasWaterEntering
@@ -272,12 +272,12 @@ export default function AIStormAssistant() {
                   value={customQuery}
                   onChange={(e) => setCustomQuery(e.target.value)}
                   placeholder="Or ask AI anything (e.g. Does insurance cover Class 4? What if my roof is leaking?)..."
-                  className="flex-1 bg-[#0b0e12] border border-[#4f4633]/60 focus:border-[#fbbf24] text-[#e1e2e8] px-3 py-2 rounded text-xs focus:outline-none transition-colors"
+                  className="flex-1 bg-[#0b0e12] border border-[#3b4352] focus:border-[#fbbf24] text-[#e1e2e8] px-3.5 py-2.5 rounded-lg text-xs focus:outline-none transition-colors"
                 />
                 <button
                   type="submit"
                   disabled={chatLoading || !customQuery.trim()}
-                  className="px-3.5 py-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-bold rounded text-xs flex items-center gap-1 transition-all disabled:opacity-50 cursor-pointer shadow shrink-0"
+                  className="px-4 py-2.5 bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] hover:from-[#f9bd22] text-[#111418] font-black rounded-lg text-xs flex items-center gap-1.5 transition-all disabled:opacity-50 cursor-pointer shadow-md shrink-0 active:scale-95"
                 >
                   {chatLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
                   <span>Ask AI</span>

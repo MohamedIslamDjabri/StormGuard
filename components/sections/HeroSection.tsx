@@ -35,7 +35,7 @@ export default function HeroSection({
       </div>
 
       {/* Hero Content Container */}
-      <div className="relative z-10 w-full px-4 md:px-8 lg:px-16 pt-10 md:pt-14 pb-10 md:pb-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 md:pt-14 pb-10 md:pb-16">
         <div className="max-w-4xl space-y-4">
           {/* Emergency Live Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#93000a]/30 border border-[#ffb4ab]/30 backdrop-blur-md shadow-lg">
@@ -65,7 +65,7 @@ export default function HeroSection({
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
             <Link
               href="#triage-terminal"
-              className="inline-flex items-center justify-center gap-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-lg text-sm px-6 py-3.5 rounded font-bold shadow-[0_0_28px_-4px_rgba(251,191,36,0.5)] transition-all transform hover:-translate-y-0.5 active:scale-95"
+              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] hover:from-[#f9bd22] hover:to-[#d97706] text-[#111418] font-label-lg text-sm px-6 py-3.5 rounded-xl font-black shadow-[0_0_24px_rgba(251,191,36,0.4)] transition-all transform hover:-translate-y-0.5 active:scale-95"
             >
               <span>{SITE_CONFIG.primaryCta}</span>
               <ArrowRight className="w-4 h-4" />
@@ -73,31 +73,31 @@ export default function HeroSection({
 
             <a
               href={`tel:${SITE_CONFIG.phoneRaw}`}
-              className="inline-flex items-center justify-center gap-2 bg-[#323539]/40 hover:bg-[#323539]/70 text-[#e1e2e8] font-label-lg text-sm px-6 py-3.5 rounded border border-[#4f4633]/60 backdrop-blur-md transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-[#1a1f26]/80 hover:bg-[#222832] text-[#f1f5f9] font-label-lg text-sm px-6 py-3.5 rounded-xl border border-[#3b4352] hover:border-[#fbbf24]/50 backdrop-blur-md transition-all active:scale-95"
             >
-              <Phone className="w-4 h-4 text-[#ffe1a7]" />
-              <span className="font-code-telemetry">Call Now: {SITE_CONFIG.phone}</span>
+              <Phone className="w-4 h-4 text-[#fbbf24]" />
+              <span className="font-code-telemetry font-bold">Call Now: {SITE_CONFIG.phone}</span>
             </a>
           </div>
 
           {/* 4 Key Trust Badges */}
           {showBadges && (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
-              <div className="flex items-center gap-2 p-2.5 rounded bg-[#191c20]/70 border border-[#4f4633]/30 backdrop-blur-sm">
-                <ShieldCheck className="w-5 h-5 text-[#ffe1a7] shrink-0" />
-                <span className="font-label-md text-xs text-[#e1e2e8]">Licensed &amp; Insured</span>
+              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-[#161a20]/85 border border-[#2b3038] hover:border-[#fbbf24]/40 backdrop-blur-md transition-all">
+                <ShieldCheck className="w-5 h-5 text-[#fbbf24] shrink-0" />
+                <span className="font-label-md text-xs font-semibold text-[#f1f5f9]">Licensed &amp; Insured</span>
               </div>
-              <div className="flex items-center gap-2 p-2.5 rounded bg-[#191c20]/70 border border-[#4f4633]/30 backdrop-blur-sm">
-                <MapPin className="w-5 h-5 text-[#ffe1a7] shrink-0" />
-                <span className="font-label-md text-xs text-[#e1e2e8]">Local Storm Units</span>
+              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-[#161a20]/85 border border-[#2b3038] hover:border-[#fbbf24]/40 backdrop-blur-md transition-all">
+                <MapPin className="w-5 h-5 text-[#fbbf24] shrink-0" />
+                <span className="font-label-md text-xs font-semibold text-[#f1f5f9]">Local Storm Units</span>
               </div>
-              <div className="flex items-center gap-2 p-2.5 rounded bg-[#191c20]/70 border border-[#4f4633]/30 backdrop-blur-sm">
-                <ClipboardCheck className="w-5 h-5 text-[#ffe1a7] shrink-0" />
-                <span className="font-label-md text-xs text-[#e1e2e8]">Free Inspection</span>
+              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-[#161a20]/85 border border-[#2b3038] hover:border-[#fbbf24]/40 backdrop-blur-md transition-all">
+                <ClipboardCheck className="w-5 h-5 text-[#fbbf24] shrink-0" />
+                <span className="font-label-md text-xs font-semibold text-[#f1f5f9]">Free Inspection</span>
               </div>
-              <div className="flex items-center gap-2 p-2.5 rounded bg-[#191c20]/70 border border-[#4f4633]/30 backdrop-blur-sm">
-                <FileText className="w-5 h-5 text-[#ffe1a7] shrink-0" />
-                <span className="font-label-md text-xs text-[#e1e2e8]">Insurance Navigators</span>
+              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-[#161a20]/85 border border-[#2b3038] hover:border-[#fbbf24]/40 backdrop-blur-md transition-all">
+                <FileText className="w-5 h-5 text-[#fbbf24] shrink-0" />
+                <span className="font-label-md text-xs font-semibold text-[#f1f5f9]">Insurance Navigators</span>
               </div>
             </div>
           )}

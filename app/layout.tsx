@@ -51,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark ${spaceGrotesk.variable} ${inter.variable}`}>
+    <html lang="en" className={`dark ${spaceGrotesk.variable} ${inter.variable} overflow-x-hidden max-w-full w-full`}>
       <head>
         <link
           rel="preconnect"
@@ -63,9 +63,9 @@ export default function RootLayout({
           crossOrigin=""
         />
       </head>
-      <body className="bg-[#111418] text-[#e1e2e8] min-h-screen flex flex-col font-body-md antialiased selection:bg-[#fbbf24] selection:text-[#6c4f00]">
+      <body className="bg-[#111418] text-[#e1e2e8] min-h-screen flex flex-col font-body-md antialiased selection:bg-[#fbbf24] selection:text-[#6c4f00] overflow-x-hidden max-w-full w-full">
         <Header />
-        <main className="flex-1 w-full bg-[#111418]">
+        <main className="flex-1 w-full max-w-full overflow-x-hidden bg-[#111418] pb-14 sm:pb-0">
           {children}
         </main>
         <GlobalAIWidgets />

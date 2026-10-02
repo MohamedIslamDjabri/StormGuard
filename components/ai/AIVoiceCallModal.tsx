@@ -340,14 +340,14 @@ export default function AIVoiceCallModal({
         </div>
 
         {/* Mode Selector Tabs */}
-        <div className="grid grid-cols-2 p-1 bg-[#191c20] border-b border-[#323539] text-xs font-label-md">
+        <div className="grid grid-cols-2 p-1.5 bg-[#14181f] border-b border-[#2b3038] text-xs font-label-md gap-1">
           <button
             type="button"
             onClick={() => setActiveTab('call')}
-            className={`py-2 text-center rounded font-bold transition-all cursor-pointer ${
+            className={`py-2 text-center rounded-lg font-black transition-all cursor-pointer ${
               activeTab === 'call'
-                ? 'bg-[#fbbf24] text-[#6c4f00] shadow-[0_0_12px_rgba(251,191,36,0.3)]'
-                : 'text-[#d3c5ac] hover:text-[#e1e2e8]'
+                ? 'bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] text-[#111418] shadow-[0_0_14px_rgba(251,191,36,0.35)]'
+                : 'text-[#cbd5e1] hover:text-[#f8fafc] hover:bg-[#1a1f26]'
             }`}
           >
             🎙️ Live AI Voice Call
@@ -355,10 +355,10 @@ export default function AIVoiceCallModal({
           <button
             type="button"
             onClick={() => setActiveTab('schedule')}
-            className={`py-2 text-center rounded font-bold transition-all cursor-pointer ${
+            className={`py-2 text-center rounded-lg font-black transition-all cursor-pointer ${
               activeTab === 'schedule'
-                ? 'bg-[#fbbf24] text-[#6c4f00] shadow-[0_0_12px_rgba(251,191,36,0.3)]'
-                : 'text-[#d3c5ac] hover:text-[#e1e2e8]'
+                ? 'bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] text-[#111418] shadow-[0_0_14px_rgba(251,191,36,0.35)]'
+                : 'text-[#cbd5e1] hover:text-[#f8fafc] hover:bg-[#1a1f26]'
             }`}
           >
             📅 Schedule AI Callback
@@ -388,7 +388,7 @@ export default function AIVoiceCallModal({
                 <button
                   type="button"
                   onClick={startCall}
-                  className="inline-flex items-center gap-2 bg-[#fbbf24] hover:bg-[#f9bd22] text-[#6c4f00] font-label-lg text-sm font-bold px-8 py-3.5 rounded-full shadow-[0_0_25px_rgba(251,191,36,0.45)] transition-all active:scale-95 cursor-pointer"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] hover:from-[#f9bd22] hover:to-[#d97706] text-[#111418] font-label-lg text-sm font-black px-8 py-3.5 rounded-full shadow-[0_0_25px_rgba(251,191,36,0.45)] transition-all active:scale-95 cursor-pointer"
                 >
                   <Phone className="w-4 h-4 fill-current" />
                   <span>Connect Voice Call Now</span>

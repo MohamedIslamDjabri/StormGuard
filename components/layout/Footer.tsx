@@ -1,25 +1,19 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Phone, Mail, ShieldAlert, CheckCircle, Radio, Rss, Radar } from 'lucide-react';
 import { SITE_CONFIG, NAV_LINKS, SERVICES } from '@/constants/data';
+import BrandLogo from '@/components/ui/BrandLogo';
 
 export default function Footer() {
   return (
     <footer className="w-full bg-[#111418] border-t border-[#323539] text-[#e1e2e8]">
-      <div className="w-full px-4 md:px-8 lg:px-16 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
           {/* Col 1: Brand & Credentials */}
           <div className="lg:col-span-4 space-y-4">
-            <div className="flex items-center gap-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={SITE_CONFIG.logoUrl}
-                alt="StormGuard Roofing Logo"
-                className="h-7 w-auto object-contain"
-              />
-              <span className="font-headline-sm text-lg text-[#e1e2e8] uppercase tracking-tight font-bold">
-                {SITE_CONFIG.name}
-              </span>
+            <div>
+              <Link href="/" className="inline-block" aria-label="StormGuard Roofing">
+                <BrandLogo size="md" showSubtitle={true} />
+              </Link>
             </div>
             <p className="font-body-sm text-xs text-[#d3c5ac] leading-relaxed max-w-sm">
               Fast emergency storm response, professional damage assessments, and rapid roof stabilization across Central Texas.
